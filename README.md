@@ -88,11 +88,11 @@ The Feedback Application comes with the following functionalities:
 
 ### 12. Real time Analytics
 
-## ![realtime data stat](image.png)
+## ![realtime data stat](src/assets/image.png)
 
 ### 13. mobile first design
 
-![mobile first design](image-1.png)
+![mobile first design](src/assets/image-1.png)
 
 ## Installation
 
