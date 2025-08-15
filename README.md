@@ -62,7 +62,33 @@ The Feedback Application comes with the following functionalities:
 - Modern form design with hover and focus effects.
 - Smooth scrolling and aesthetic color scheme.
 
----
+### 9. Filtering Feedback besed on likes and dislikes and category
+
+- Users can filter feedback based on likes and dislikes and category.
+
+### 10. Tag your feedback with list options
+
+- you can tag your given feedback from this tags
+<table>
+    <th>Tags</th>
+    <tr>
+        <td><a>UI</a></td>
+        <td><a>UX</a></td>
+        <td><a>Performance</a></td>
+        <td><a>Features</a></td>
+        <td><a>Bug</a></td>
+        <td><a>Praise</a></td>
+        <td><a>Others</a></td>
+    </tr>
+</table>
+
+### 11. You can give feedback with anonymous mode without giving your name
+
+- Users can give feedback anonymously without providing their name.
+
+### 12. Real time Analytics
+
+## ![alt text](image.png)
 
 ## Installation
 
@@ -78,7 +104,41 @@ git clone https://github.com/KALYANIHF/feedbackApp.git
 cd feedback-app
 ```
 
-3. Open `index.html` in your preferred browser.
+3. Run through any js package manger like npm, yarn, pnpm, bun to install dependencies: <i>( i use bun because it fast more than any other choices in the market )</i>
+
+```bash
+bun i
+```
+
+OR
+
+```bash
+bun install
+```
+
+OR
+
+```bash
+npm install
+```
+
+OR
+
+```bash
+yarn install
+```
+
+OR
+
+```bash
+pnpm install
+```
+
+4. To Run the application use the following command: <i>( here i am using bun you can use any other one as above just replace bun with your prefer dependency package manager )</i>
+
+```bash
+bun run dev
+```
 
 ---
 
@@ -108,19 +168,21 @@ cd feedback-app
 
 ## Technologies Used
 
-- HTML5 – Structured and semantic markup
+- JSX – JavaScript syntax and features
+- HTMl - Structured and semantic markup
 - CSS3 – Modern styling and responsive layout
 - JavaScript – Dynamic UI updates and statistics calculation
+- React – JavaScript library for building user interfaces
+- Vite – Modern build tool for JavaScript and CSS
+- ESLint – JavaScript linter for code quality
+- Prettier – Code formatter for consistent code style
+- Jest – JavaScript testing framework for unit testing
 
 ---
 
 ## Screenshots
 
-**Feedback Form**&#x20;
-
-**Feedback List**&#x20;
-
-**Statistics Panel**&#x20;
+![Feedback Application Screenshot](/src/assets/projectThumnail.png)
 
 ---
 
