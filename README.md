@@ -69,7 +69,7 @@ The Feedback Application comes with the following functionalities:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/feedback-app.git
+git clone https://github.com/KALYANIHF/feedbackApp.git
 ```
 
 2. Navigate to the project directory:
