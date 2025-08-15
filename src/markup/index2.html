@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feedback App — Modern</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ===== THEME TOKENS ===== */
+      :root {
+        --bg: #0b0f14; /* deep canvas */
+        --panel: #0f141c; /* elevated surface */
+        --panel-2: #121a24; /* alt surface */
+        --text: #e6edf3; /* primary text */
+        --text-dim: #a5b1bf; /* dim text */
+        --line: #1f2a37; /* subtle border */
+        --brand: #78a6ff; /* brand 1 */
+        --brand-2: #b38cff; /* brand 2 */
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --bad: #ef4444;
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+        --radius: 14px;
+        --radius-lg: 18px;
+        --radius-sm: 10px;
+      }
+      /* light mode */
+      body.light {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --panel-2: #ffffff;
+        --text: #0c1116;
+        --text-dim: #667182;
+        --line: #e7ecf2;
+        --brand: #4e9fff;
+        --brand-2: #a06bff;
+        --shadow: 0 20px 50px rgba(14, 17, 22, 0.08);
+      }
+
+      /* ===== GLOBAL ===== */
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+        letter-spacing: 0.1px;
+      }
+      .section-title {
+        margin: 0 0 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section-title::after {
+        content: "";
+        height: 2px;
+        flex: 1;
+        background: linear-gradient(90deg, var(--brand), transparent);
+      }
+      .muted {
+        color: var(--text-dim);
+      }
+
+      /* ===== HEADER ===== */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(12px);
+        background: color-mix(in hsl, var(--panel) 70%, transparent);
+      }
+      .header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0.9rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+      .logo {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        box-shadow: 0 10px 24px color-mix(in srgb, var(--brand), #000 50% /0.4);
+      }
+      .logo span {
+        font-weight: 900;
+        color: #fff;
+      }
+      .title {
+        margin: 0;
+        font-family: Poppins, Inter, sans-serif;
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: 0.2px;
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .icon-btn {
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+        color: var(--text);
+        border-radius: 12px;
+        padding: 0.55rem 0.7rem;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+      .icon-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+      }
+
+      /* ===== LAYOUT ===== */
+      .wrapper {
+        max-width: 1200px;
+        margin: 18px auto;
+        padding: 0 14px;
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: 18px;
+      }
+      @media (max-width: 1100px) {
+        .wrapper {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+      .panel + .panel {
+        margin-top: 12px;
+      }
+
+      /* ===== FORM ===== */
+      .label {
+        font-weight: 600;
+        color: var(--text-dim);
+        margin-bottom: 8px;
+      }
+      .input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+        color: var(--text);
+        padding: 12px;
+        outline: none;
+        transition: border 0.2s, box-shadow 0.2s;
+      }
+      .input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 30%, transparent);
+      }
+      .grid {
+        display: grid;
+        gap: 12px;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      @media (max-width: 520px) {
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* rating radios */
+      .rating {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 8px;
+      }
+      .rating input {
+        display: none;
+      }
+      .rating label {
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: linear-gradient(
+          180deg,
+          color-mix(in srgb, #fff 6%, transparent),
+          color-mix(in srgb, #000 10%, transparent)
+        );
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.18s ease;
+      }
+      .rating label:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+      }
+      .rating input:checked + label {
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        color: #fff;
+        border-color: transparent;
+        box-shadow: 0 10px 24px
+          color-mix(in srgb, var(--brand) 60%, #000 40% / 0.5);
+      }
+
+      /* textarea + helper */
+      .textwrap {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+        overflow: hidden;
+      }
+      .textwrap textarea {
+        border: 0;
+        background: transparent;
+        min-height: 120px;
+      }
+      .textwrap .helper {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px 12px;
+        border-top: 1px dashed var(--line);
+        font-size: 0.9rem;
+        color: var(--text-dim);
+      }
+      .count.ok {
+        color: var(--text-dim);
+      }
+      .count.warn {
+        color: var(--warn);
+      }
+      .count.bad {
+        color: var(--bad);
+      }
+
+      /* switches & chips */
+      .switch {
+        position: relative;
+        width: 54px;
+        height: 30px;
+        background: color-mix(in srgb, var(--panel) 70%, #fff 10%);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .switch input {
+        display: none;
+      }
+      .switch .dot {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 26px;
+        height: 26px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      }
+      .switch input:checked + .dot {
+        transform: translateX(24px);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+        font-size: 0.86rem;
+      }
+
+      /* buttons */
+      .btn {
+        border: 0;
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        box-shadow: 0 16px 38px
+          color-mix(in srgb, var(--brand) 60%, #000 40% / 0.5);
+        transition: 0.15s;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+      .btn.secondary {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--line);
+        box-shadow: none;
+      }
+
+      /* ===== TOOLBAR / FILTERS ===== */
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .toolbar .input {
+        min-width: 189px;
+      }
+      .range {
+        display: flex;
+        gap: 8px;
+        /* grid-template-columns: auto; */
+      }
+
+      /* ===== STATS ===== */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      @media (max-width: 900px) {
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .stat {
+        background: var(--panel-2);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+      }
+      .stat .num {
+        font-size: 1.6rem;
+        font-weight: 900;
+      }
+      .tagcloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      /* chart */
+      .chart {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 6px;
+        align-items: end;
+        height: 120px;
+        padding: 8px;
+        border-radius: 12px;
+        border: 1px dashed var(--line);
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+      }
+      .bar {
+        height: 8px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, var(--brand), var(--brand-2));
+        transition: height 0.45s ease;
+      }
+
+      /* ===== LIST ===== */
+      .list {
+        display: grid;
+        gap: 12px;
+      }
+      .item {
+        background: linear-gradient(
+          145deg,
+          color-mix(in srgb, var(--panel) 85%, transparent),
+          color-mix(in srgb, var(--panel-2) 90%, transparent)
+        );
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        padding: 14px;
+        box-shadow: var(--shadow);
+        transition: transform 0.2s;
+      }
+      .item:hover {
+        transform: translateY(-2px);
+      }
+      .item-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ava {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 900;
+        background: linear-gradient(180deg, #7c8aff, #5bc0eb);
+      }
+      .badge {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 0.78rem;
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+      }
+      .pill {
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        border: 0;
+        color: #fff;
+      }
+      .msg {
+        margin: 10px 0 8px;
+        line-height: 1.6;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .act {
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 6px 9px;
+        cursor: pointer;
+      }
+      .count {
+        font-weight: 800;
+        margin-left: 6px;
+      }
+      .reply {
+        display: none;
+        margin-top: 8px;
+      }
+      .reply textarea {
+        min-height: 80px;
+      }
+
+      /* PRINT */
+      @media print {
+        header,
+        .no-print {
+          display: none;
+        }
+        .wrapper {
+          grid-template-columns: 1fr;
+        }
+      }
+      .footer {
+        position: relative;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-color);
+        text-align: center;
+        padding: 0.8rem 1rem; /* reduced height */
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+        font-family: inherit;
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+      }
+
+      .footer::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.1),
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .footer:hover {
+        background: rgba(255, 255, 255, 0.14);
+        box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.15);
+      }
+
+      .footer:hover::after {
+        opacity: 1;
+      }
+
+      body.dark-mode .footer {
+        background: rgba(20, 20, 20, 0.15);
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      body.dark-mode .footer:hover {
+        background: rgba(20, 20, 20, 0.18);
+      }
+
+      .footer p {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.4px;
+        opacity: 0.92;
+      }
+    </style>
+  </head>
+  <body class="light">
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <div class="logo"><span>💬</span></div>
+          <h1 class="title">
+            Feedback<span
+              style="
+                background: linear-gradient(90deg, #ff9776, #ffd36e);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+              "
+              >App</span
+            >
+          </h1>
+        </div>
+        <div class="actions">
+          <button id="theme" class="icon-btn" aria-label="Toggle theme">
+            🌙
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrapper">
+      <!-- LEFT: FORM TODO: done-->
+      <div>
+        <!-- TODO: feedback form is done -->
+        <section class="panel">
+          <h2 class="section-title">Create Feedback</h2>
+          <div class="grid">
+            <div>
+              <div class="label">Rating (1–10)</div>
+              <div id="rating" class="rating" aria-label="Select rating">
+                <!-- radios injected -->
+              </div>
+            </div>
+            <div>
+              <div class="label">Feedback</div>
+              <div class="textwrap">
+                <textarea
+                  id="message"
+                  maxlength="300"
+                  placeholder="Share your thoughts… What worked well? What could be better?"
+                ></textarea>
+                <div class="helper">
+                  <span class="muted">Tip: be specific; it helps a ton.</span
+                  ><span id="count" class="count ok">0/300</span>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-2">
+              <div>
+                <div class="label">Tags (multi)</div>
+                <select id="tags" multiple>
+                  <option>UI</option>
+                  <option>UX</option>
+                  <option>Performance</option>
+                  <option>Features</option>
+                  <option>Bug</option>
+                  <option>Praise</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <div class="label">Add custom tag</div>
+                <input
+                  id="customTag"
+                  class="input"
+                  type="text"
+                  placeholder="Type and press Enter"
+                />
+              </div>
+            </div>
+            <div class="grid grid-2">
+              <div>
+                <div class="label">Anonymous</div>
+                <label class="switch"
+                  ><input id="anon" type="checkbox" /><span class="dot"></span
+                ></label>
+              </div>
+              <div
+                class="no-print"
+                style="
+                  display: flex;
+                  gap: 8px;
+                  align-items: end;
+                  justify-content: flex-end;
+                "
+              >
+                <button id="submit" class="btn">Submit</button>
+                <button id="reset" class="btn secondary">Reset</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel no-print">
+          <h2 class="section-title">Search & Filters</h2>
+          <div class="toolbar">
+            <input id="q" class="input" placeholder="Search by keyword…" />
+            <select id="fTag">
+              <option value="">All tags</option>
+              <option>UI</option>
+              <option>UX</option>
+              <option>Performance</option>
+              <option>Features</option>
+              <option>Bug</option>
+              <option>Praise</option>
+              <option>Other</option>
+            </select>
+            <div class="range">
+              <input
+                id="minR"
+                class="input"
+                type="number"
+                min="1"
+                max="10"
+                value="1"
+                placeholder="Min"
+              />
+              <input
+                id="maxR"
+                class="input"
+                type="number"
+                min="1"
+                max="10"
+                value="10"
+                placeholder="Max"
+              />
+            </div>
+            <select id="sort">
+              <option value="new">Newest</option>
+              <option value="old">Oldest</option>
+              <option value="high">Highest rating</option>
+              <option value="low">Lowest rating</option>
+              <option value="liked">Most liked</option>
+            </select>
+            <button id="clear" class="btn secondary">Clear</button>
+          </div>
+          <div class="muted" id="rc" style="margin-top: 6px"></div>
+        </section>
+      </div>
+
+      <!-- RIGHT: LIST + ANALYTICS TODO: done -->
+      <div>
+        <section class="panel">
+          <h2 class="section-title">Analytics</h2>
+          <div class="stats">
+            <div class="stat">
+              <div class="num" id="avg">—</div>
+              <div class="muted">Average Rating</div>
+            </div>
+            <div class="stat">
+              <div class="num" id="total">0</div>
+              <div class="muted">Total Feedback</div>
+            </div>
+            <div class="stat">
+              <div class="num" id="sent">😐</div>
+              <div class="muted">Sentiment</div>
+            </div>
+            <div class="stat"><div class="tagcloud" id="tagsTop"></div></div>
+          </div>
+          <div style="margin-top: 12px">
+            <div class="chart" id="chart"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">All Feedback</div>
+          <div
+            class="no-print"
+            style="
+              display: flex;
+              gap: 8px;
+              margin-bottom: 10px;
+              justify-content: flex-end;
+            "
+          >
+            <button id="export" class="btn secondary">Export CSV</button>
+            <button id="print" class="btn secondary">Print Report</button>
+            <button id="share" class="btn secondary">Share Filters</button>
+          </div>
+          <div id="list" class="list"></div>
+        </section>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>© 2025 Feedback App. All rights reserved.</p>
+    </footer>
+
+    <script>
+      /* ========= Helpers ========= */
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+      const store = {
+        get() {
+          try {
+            return JSON.parse(localStorage.getItem("fb-data") || "[]");
+          } catch {
+            return [];
+          }
+        },
+        set(v) {
+          localStorage.setItem("fb-data", JSON.stringify(v));
+        },
+      };
+      const themeKey = "theme-mode";
+
+      /* ========= Theme ========= */
+      const body = document.body;
+      const themeBtn = $("#theme");
+      function applyTheme(v) {
+        body.classList.toggle("light", v === "light");
+        themeBtn.textContent = v === "light" ? "🌙" : "🌞";
+      }
+      applyTheme(localStorage.getItem(themeKey) || "light");
+      themeBtn.addEventListener("click", () => {
+        const next = body.classList.contains("light") ? "dark" : "light";
+        localStorage.setItem(themeKey, next);
+        applyTheme(next);
+      });
+
+      /* ========= Rating Radios ========= */
+      const rating = $("#rating");
+      for (let i = 1; i <= 10; i++) {
+        const id = "r" + i;
+        const inp = Object.assign(document.createElement("input"), {
+          type: "radio",
+          id,
+          name: "rating",
+          value: String(i),
+        });
+        const lab = Object.assign(document.createElement("label"), {
+          htmlFor: id,
+        });
+        lab.textContent = i;
+        rating.append(inp, lab);
+      }
+
+      /* ========= Form Elements ========= */
+      const message = $("#message"),
+        count = $("#count"),
+        tagsSel = $("#tags"),
+        customTag = $("#customTag"),
+        anon = $("#anon");
+      function updateCount() {
+        const l = message.value.length;
+        count.textContent = `${l}/300`;
+        count.className =
+          "count " + (l > 260 ? (l > 300 ? "bad" : "warn") : "ok");
+      }
+      message.addEventListener("input", updateCount);
+      updateCount();
+      customTag.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && customTag.value.trim()) {
+          const v = customTag.value.trim();
+          const opt = document.createElement("option");
+          opt.value = v;
+          opt.textContent = v;
+          opt.selected = true;
+          tagsSel.appendChild(opt);
+          customTag.value = "";
+        }
+      });
+
+      function autoTags(txt) {
+        const map = [
+          [/(?:bug|issue|error|crash)/i, "Bug"],
+          [/(?:slow|lag|performance|load)/i, "Performance"],
+          [/(?:ui|design|layout|look)/i, "UI"],
+          [/(?:ux|usability|confusing)/i, "UX"],
+          [/(?:feature|missing|add|support)/i, "Features"],
+          [/(?:love|great|awesome|nice|amazing|thanks)/i, "Praise"],
+        ];
+        const set = new Set();
+        map.forEach(([re, t]) => re.test(txt) && set.add(t));
+        return [...set];
+      }
+      function selTags() {
+        return Array.from(tagsSel.selectedOptions).map((o) => o.value);
+      }
+
+      /* ========= Data ========= */
+      let data = store.get();
+      if (!data.length) {
+        data = [
+          {
+            id: 1,
+            name: "Aarav",
+            anon: false,
+            rating: 8,
+            tags: ["UI", "Performance"],
+            msg: "The new design looks amazing, but the dashboard could load faster on mobile.",
+            ts: Date.now() - 86400000 * 2,
+            like: 5,
+            love: 3,
+            dislike: 0,
+            reply: "",
+          },
+          {
+            id: 2,
+            name: "Mira",
+            anon: true,
+            rating: 10,
+            tags: ["Performance", "Praise"],
+            msg: "Super fast now! Animations are silky smooth. Keep it up 🙌",
+            ts: Date.now() - 86400000 * 1.5,
+            like: 8,
+            love: 6,
+            dislike: 0,
+            reply: "Thanks for the love!",
+          },
+          {
+            id: 3,
+            name: "Dev",
+            anon: false,
+            rating: 6,
+            tags: ["Features"],
+            msg: "Would love multi-project support and bulk tagging.",
+            ts: Date.now() - 86400000 * 0.8,
+            like: 2,
+            love: 1,
+            dislike: 0,
+            reply: "",
+          },
+          {
+            id: 4,
+            name: "Sara",
+            anon: false,
+            rating: 4,
+            tags: ["Bug", "UX"],
+            msg: "Ran into a bug while saving. Also the settings labels are a bit confusing.",
+            ts: Date.now() - 86400000 * 0.3,
+            like: 1,
+            love: 0,
+            dislike: 2,
+            reply: "",
+          },
+        ];
+        store.set(data);
+      }
+
+      /* ========= Submit ========= */
+      $("#submit").addEventListener("click", () => {
+        const rVal = Number($('input[name="rating"]:checked')?.value || 0);
+        const txt = message.value.trim();
+        if (!rVal) return alert("Select a rating (1–10).");
+        if (!txt) return alert("Please write your feedback.");
+        const tgs = Array.from(new Set(selTags().concat(autoTags(txt))));
+        data.unshift({
+          id: Date.now(),
+          name: "You",
+          anon: anon.checked,
+          rating: rVal,
+          tags: tgs,
+          msg: txt,
+          ts: Date.now(),
+          like: 0,
+          love: 0,
+          dislike: 0,
+          reply: "",
+        });
+        store.set(data);
+        renderAll();
+        message.value = "";
+        updateCount();
+        $$("input[name='rating']").forEach((i) => (i.checked = false));
+        tagsSel.selectedIndex = -1;
+        customTag.value = "";
+        anon.checked = false;
+      });
+      $("#reset").addEventListener("click", () => {
+        message.value = "";
+        updateCount();
+        $$("input[name='rating']").forEach((i) => (i.checked = false));
+        tagsSel.selectedIndex = -1;
+        customTag.value = "";
+        anon.checked = false;
+      });
+
+      /* ========= Filters ========= */
+      const q = $("#q"),
+        fTag = $("#fTag"),
+        minR = $("#minR"),
+        maxR = $("#maxR"),
+        sort = $("#sort"),
+        rc = $("#rc");
+      $("#clear").addEventListener("click", () => {
+        q.value = "";
+        fTag.value = "";
+        minR.value = 1;
+        maxR.value = 10;
+        sort.value = "new";
+        renderAll();
+      });
+
+      /* ===== Robust copy-to-clipboard helper ===== */
+      async function copyTextToClipboard(text) {
+        // Try modern Clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (e) {
+            console.warn("navigator.clipboard.writeText failed:", e);
+          }
+        }
+        // Fallback to execCommand
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "absolute";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          if (ok) return true;
+        } catch (e) {
+          console.warn("execCommand copy failed:", e);
+        }
+        // Final fallback: show prompt so user can copy manually
+        try {
+          window.prompt("Copy the link manually (Ctrl/Cmd+C):", text);
+        } catch (e) {
+          console.warn("prompt fallback failed", e);
+        }
+        return false;
+      }
+
+      /* Share filters (uses robust copy helper) */
+      $("#share").addEventListener("click", async () => {
+        const s = new URLSearchParams({
+          q: q.value,
+          tag: fTag.value,
+          min: minR.value,
+          max: maxR.value,
+          sort: sort.value,
+        }).toString();
+        const url = location.origin + location.pathname + (s ? "?" + s : "");
+        const ok = await copyTextToClipboard(url);
+        if (ok) alert("Shareable link copied to clipboard!");
+        else
+          alert(
+            "Could not copy automatically. A dialog was opened with the link — please copy it manually."
+          );
+      });
+
+      /* Load filters from URL if present */
+      (function () {
+        const p = new URLSearchParams(location.search);
+        if (p.size) {
+          q.value = p.get("q") || "";
+          fTag.value = p.get("tag") || "";
+          minR.value = p.get("min") || 1;
+          maxR.value = p.get("max") || 10;
+          sort.value = p.get("sort") || "new";
+        }
+      })();
+
+      /* ========= Export & Print ========= */
+      $("#export").addEventListener("click", () => {
+        const rows = [
+          [
+            "id",
+            "name",
+            "anonymous",
+            "rating",
+            "tags",
+            "message",
+            "timestamp",
+            "like",
+            "love",
+            "dislike",
+            "reply",
+          ],
+        ];
+        store
+          .get()
+          .forEach((i) =>
+            rows.push([
+              i.id,
+              i.name,
+              i.anon,
+              i.rating,
+              i.tags.join("|"),
+              i.msg.replace(/\n/g, " "),
+              new Date(i.ts).toISOString(),
+              i.like,
+              i.love,
+              i.dislike,
+              i.reply || "",
+            ])
+          );
+        const csv = rows
+          .map((r) =>
+            r.map((v) => `"${String(v).replaceAll('"', '""')}"`).join(",")
+          )
+          .join("\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "feedback.csv";
+        a.click();
+      });
+      $("#print").addEventListener("click", () => window.print());
+
+      /* ========= Rendering ========= */
+      const listEl = $("#list"),
+        avgEl = $("#avg"),
+        totalEl = $("#total"),
+        sentEl = $("#sent"),
+        tagsTop = $("#tagsTop"),
+        chart = $("#chart");
+      [q, fTag, minR, maxR, sort].forEach((el) =>
+        el.addEventListener("input", () => renderAll())
+      );
+
+      function filtered() {
+        let arr = data.slice();
+        const term = q.value.trim().toLowerCase();
+        if (term)
+          arr = arr.filter(
+            (i) =>
+              i.msg.toLowerCase().includes(term) ||
+              i.tags.join(" ").toLowerCase().includes(term) ||
+              i.name.toLowerCase().includes(term)
+          );
+        if (fTag.value) arr = arr.filter((i) => i.tags.includes(fTag.value));
+        const lo = clamp(parseInt(minR.value || "1", 10), 1, 10),
+          hi = clamp(parseInt(maxR.value || "10", 10), 1, 10);
+        arr = arr.filter((i) => i.rating >= lo && i.rating <= hi);
+        const s = sort.value;
+        arr.sort((a, b) =>
+          s === "new"
+            ? b.ts - a.ts
+            : s === "old"
+            ? a.ts - b.ts
+            : s === "high"
+            ? b.rating - a.rating
+            : s === "low"
+            ? a.rating - b.rating
+            : b.like +
+              b.love * 2 -
+              b.dislike -
+              (a.like + a.love * 2 - a.dislike)
+        );
+        return arr;
+      }
+
+      function renderList(arr) {
+        listEl.innerHTML = "";
+        arr.forEach((it) => {
+          const card = document.createElement("div");
+          card.className = "item";
+          const top = document.createElement("div");
+          top.className = "item-top";
+          const left = document.createElement("div");
+          left.className = "left";
+          const ava = document.createElement("div");
+          ava.className = "ava";
+          const seed = (it.name || "U").charCodeAt(0) + (it.anon ? 17 : 0);
+          const colors = [
+            "#7c8aff",
+            "#5bc0eb",
+            "#f59e0b",
+            "#10b981",
+            "#ef4444",
+            "#a06bff",
+            "#f472b6",
+          ];
+          ava.style.background = `linear-gradient(180deg, ${
+            colors[seed % colors.length]
+          }, ${colors[(seed + 2) % colors.length]})`;
+          ava.textContent = it.anon
+            ? "🙂"
+            : it.name
+            ? it.name[0].toUpperCase()
+            : "U";
+          const meta = document.createElement("div");
+          const rating = document.createElement("span");
+          rating.className = "badge pill";
+          rating.textContent = `⭐ ${it.rating}`;
+          const time = document.createElement("span");
+          time.className = "badge";
+          time.textContent = new Date(it.ts).toLocaleString();
+          meta.append(rating, time);
+          left.append(ava, meta);
+          const rmeta = document.createElement("div");
+          it.tags.forEach((t) => {
+            const b = document.createElement("span");
+            b.className = "badge";
+            b.textContent = t;
+            rmeta.appendChild(b);
+          });
+          top.append(left, rmeta);
+          const msg = document.createElement("div");
+          msg.className = "msg";
+          msg.textContent = it.msg;
+          const actions = document.createElement("div");
+          actions.className = "actions";
+          function mk(label, key) {
+            const b = document.createElement("button");
+            b.className = "act";
+            b.innerHTML = `${label} <span class='count'>${it[key] || 0}</span>`;
+            b.addEventListener("click", () => {
+              it[key] = (it[key] || 0) + 1;
+              store.set(data);
+              renderAll();
+            });
+            return b;
+          }
+          const like = mk("👍", "like"),
+            love = mk("❤️", "love"),
+            dislike = mk("👎", "dislike");
+          const replyToggle = document.createElement("button");
+          replyToggle.className = "act";
+          replyToggle.textContent = "Reply";
+          const reply = document.createElement("div");
+          reply.className = "reply";
+          const ta = document.createElement("textarea");
+          ta.className = "input";
+          ta.placeholder = "Write a reply…";
+          ta.value = it.reply || "";
+          const save = document.createElement("button");
+          save.className = "btn secondary";
+          save.textContent = "Save";
+          save.addEventListener("click", () => {
+            it.reply = ta.value.trim();
+            store.set(data);
+            renderAll();
+          });
+          reply.append(ta, save);
+          replyToggle.addEventListener("click", () => {
+            reply.style.display = reply.style.display ? "" : "block";
+          });
+          actions.append(like, love, dislike, replyToggle);
+          card.append(top, msg, actions, reply);
+          listEl.appendChild(card);
+        });
+      }
+
+      function renderStats(arr) {
+        const n = arr.length;
+        totalEl.textContent = n;
+        const avg = n ? arr.reduce((s, i) => s + i.rating, 0) / n : 0;
+        avgEl.textContent = n ? avg.toFixed(1) : "—";
+        sentEl.textContent = n
+          ? avg >= 8
+            ? "😄"
+            : avg >= 5
+            ? "😐"
+            : "😕"
+          : "😐";
+        const map = {};
+        arr.forEach((i) => i.tags.forEach((t) => (map[t] = (map[t] || 0) + 1)));
+        const top = Object.entries(map)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 6);
+        tagsTop.innerHTML = "";
+        top.forEach(([t, c]) => {
+          const el = document.createElement("span");
+          el.className = "chip";
+          el.textContent = `${t} · ${c}`;
+          tagsTop.appendChild(el);
+        });
+        chart.innerHTML = "";
+        const dist = Array(11).fill(0);
+        arr.forEach((i) => dist[i.rating]++);
+        const mx = Math.max(1, ...dist.slice(1));
+        for (let r = 1; r <= 10; r++) {
+          const bar = document.createElement("div");
+          bar.className = "bar";
+          bar.style.height = ((dist[r] / mx) * 100 || 4) + "%";
+          chart.appendChild(bar);
+        }
+      }
+
+      function renderAll() {
+        const arr = filtered();
+        renderList(arr);
+        renderStats(arr);
+        rc.textContent = `${arr.length} shown · ${data.length} total`;
+      }
+      renderAll();
+    </script>
+  </body>
+</html>

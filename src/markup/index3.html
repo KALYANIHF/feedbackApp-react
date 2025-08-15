@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feedback App</title>
+    <style>
+      /* Reset & basic styles */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: #f0f0f0;
+        color: #333;
+        transition: background 0.3s, color 0.3s;
+      }
+
+      body.dark {
+        background: #121212;
+        color: #f0f0f0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 0.5em;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      /* Theme toggle */
+      .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 20px;
+        background: #007bff;
+        color: #fff;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+
+      .theme-toggle:hover {
+        background: #0056b3;
+      }
+
+      /* Feedback Form */
+      .feedback-form {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      body.dark .feedback-form {
+        background: rgba(18, 18, 18, 0.85);
+      }
+
+      .feedback-form input[type="text"],
+      .feedback-form select,
+      .feedback-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+      }
+
+      .feedback-form button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        background: #28a745;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .feedback-form button:hover {
+        background: #1e7e34;
+      }
+
+      /* Feedback List Grid */
+      .feedback-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .feedback-item {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+
+      .feedback-item:hover {
+        transform: translateY(-5px);
+      }
+
+      body.dark .feedback-item {
+        background: rgba(18, 18, 18, 0.85);
+      }
+
+      .feedback-item h4 {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .feedback-item p {
+        margin-bottom: 5px;
+      }
+
+      .feedback-item .category {
+        font-size: 12px;
+        font-weight: bold;
+        color: #007bff;
+      }
+
+      /* Statistics */
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 40px;
+      }
+
+      .stat-item {
+        flex: 1 1 200px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      body.dark .stat-item {
+        background: rgba(18, 18, 18, 0.85);
+      }
+
+      .stat-item h3 {
+        font-size: 32px;
+        margin-bottom: 10px;
+      }
+
+      .stat-item p {
+        font-size: 14px;
+        color: #555;
+      }
+
+      body.dark .stat-item p {
+        color: #ccc;
+      }
+
+      /* Footer */
+      footer {
+        margin-top: 50px;
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px 15px 0 0;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+      }
+
+      body.dark footer {
+        background: rgba(18, 18, 18, 0.15);
+      }
+    </style>
+  </head>
+  <body>
+    <button class="theme-toggle">Toggle Theme</button>
+
+    <div class="container">
+      <h1>Feedback Application</h1>
+
+      <!-- Feedback Form -->
+      <div class="feedback-form">
+        <h2>Submit Your Feedback</h2>
+        <input type="text" id="username" placeholder="Your Name" />
+        <select id="category">
+          <option value="">Select Category</option>
+          <option value="UI">UI</option>
+          <option value="Performance">Performance</option>
+          <option value="Features">Features</option>
+        </select>
+        <textarea
+          id="message"
+          rows="4"
+          placeholder="Your feedback..."
+        ></textarea>
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" min="1" max="10" value="5" />
+        <button id="submitFeedback">Submit</button>
+      </div>
+
+      <!-- Feedback List -->
+      <h2>All Feedback</h2>
+      <div class="feedback-list" id="feedbackList">
+        <!-- Feedback items will appear here -->
+      </div>
+
+      <!-- Statistics -->
+      <h2>Statistics</h2>
+      <div class="stats">
+        <div class="stat-item">
+          <h3 id="avgRating">0</h3>
+          <p>Average Rating</p>
+        </div>
+        <div class="stat-item">
+          <h3 id="totalFeedback">0</h3>
+          <p>Total Feedback</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>&copy; 2025 Feedback App | Designed by Souvik Mondal</footer>
+
+    <script>
+      const themeToggle = document.querySelector(".theme-toggle");
+      const body = document.body;
+      themeToggle.addEventListener("click", () => {
+        body.classList.toggle("dark");
+      });
+
+      const submitBtn = document.getElementById("submitFeedback");
+      const feedbackList = document.getElementById("feedbackList");
+      const avgRatingEl = document.getElementById("avgRating");
+      const totalFeedbackEl = document.getElementById("totalFeedback");
+
+      let feedbackData = [];
+
+      function updateStats() {
+        const total = feedbackData.length;
+        totalFeedbackEl.textContent = total;
+        if (total === 0) {
+          avgRatingEl.textContent = 0;
+          return;
+        }
+        const sum = feedbackData.reduce((acc, f) => acc + f.rating, 0);
+        avgRatingEl.textContent = (sum / total).toFixed(1);
+      }
+
+      function renderFeedback() {
+        feedbackList.innerHTML = "";
+        feedbackData.forEach((f) => {
+          const div = document.createElement("div");
+          div.className = "feedback-item";
+          div.innerHTML = `
+          <h4>${f.name}</h4>
+          <p>${f.message}</p>
+          <p class="category">${f.category}</p>
+          <p>Rating: ${f.rating}</p>
+        `;
+          feedbackList.appendChild(div);
+        });
+        updateStats();
+      }
+
+      submitBtn.addEventListener("click", () => {
+        const name = document.getElementById("username").value.trim();
+        const category = document.getElementById("category").value;
+        const message = document.getElementById("message").value.trim();
+        const rating = parseInt(document.getElementById("rating").value);
+
+        if (!name || !category || !message || rating < 1 || rating > 10) {
+          alert("Please fill all fields correctly.");
+          return;
+        }
+
+        feedbackData.push({ name, category, message, rating });
+        renderFeedback();
+
+        document.getElementById("username").value = "";
+        document.getElementById("category").value = "";
+        document.getElementById("message").value = "";
+        document.getElementById("rating").value = 5;
+      });
+    </script>
+  </body>
+</html>
