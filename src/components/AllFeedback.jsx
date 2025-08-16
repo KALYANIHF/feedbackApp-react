@@ -25,7 +25,7 @@ function AllFeedback() {
       </div>
       <div id="list" className="list">
         {feedbacklist.map((item) => {
-          return <FeedbackItem />;
+          return <FeedbackItem key={item.id} />;
         })}
       </div>
     </section>

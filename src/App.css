@@ -15,6 +15,7 @@
   --radius: 14px;
   --radius-lg: 18px;
   --radius-sm: 10px;
+  --transition-duration: 0.5s;
 }
 /* light mode */
 body.light {
@@ -27,6 +28,10 @@ body.light {
   --brand: #4e9fff;
   --brand-2: #a06bff;
   --shadow: 0 20px 50px rgba(14, 17, 22, 0.08);
+  transition: background-color var(--transition-duration) ease-in;
+}
+body.dark {
+  transition: background-color var(--transition-duration) ease-in;
 }
 
 /* ===== GLOBAL ===== */
