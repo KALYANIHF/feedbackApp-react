@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { globalReducer } from "../reducers/globalReducer";
 const GlobalContext = createContext();
 export const GlobalContextProvider = ({ children }) => {
@@ -10,12 +10,27 @@ export const GlobalContextProvider = ({ children }) => {
   };
   const [currentState, dispatch] = useReducer(globalReducer, initialState);
   const toggleTheme = () => {
-    dispatch({
-      type: "SET_THEME",
-      payload: currentState.theme === "light" ? "dark" : "light",
-    });
-    document.body.className = currentState.theme;
+    console.log(currentState.theme);
+    if (currentState.theme === "dark") {
+      dispatch({
+        type: "SET_THEME",
+      });
+      dispatch({
+        type: "SET_THEME_ICON",
+        payload: "☀️",
+      });
+    } else {
+      dispatch({
+        type: "SET_THEME",
+      });
+      dispatch({
+        type: "SET_THEME_ICON",
+        payload: "🌙",
+      });
+    }
   };
+  const createFeedback = () => {};
+
   return (
     <GlobalContext.Provider
       value={{

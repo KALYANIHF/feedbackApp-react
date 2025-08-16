@@ -1,7 +1,10 @@
 const globalReducer = (initialState, action) => {
   switch (action.type) {
     case "SET_THEME":
-      return { ...initialState, theme: action.payload };
+      return {
+        ...initialState,
+        theme: initialState.theme === "dark" ? "light" : "dark",
+      };
     case "SET_THEME_ICON":
       return { ...initialState, themeIcon: action.payload };
     case "SET_RATING":

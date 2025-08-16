@@ -12,8 +12,9 @@ function Header() {
     useContext(GlobalContext);
 
   useEffect(() => {
-    document.body.className = theme;
-  }, []);
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(theme);
+  }, [theme]);
   return (
     <header>
       <div className="header-inner">
