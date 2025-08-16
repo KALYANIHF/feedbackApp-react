@@ -7,11 +7,11 @@ import FeedbackSearch from "./components/FeedbackSearch";
 import AllFeedback from "./components/AllFeedback";
 import FeedbackStat from "./components/FeedbackStat";
 import feedbacklist from "./_data/feedback";
+import { GlobalContextProvider } from "./context/GlobalContext";
 
 function App() {
-  console.log(feedbacklist);
   return (
-    <>
+    <GlobalContextProvider>
       <Header />
       <Wrapper>
         <div>
@@ -24,7 +24,7 @@ function App() {
         </div>
       </Wrapper>
       <Footer />
-    </>
+    </GlobalContextProvider>
   );
 }
 

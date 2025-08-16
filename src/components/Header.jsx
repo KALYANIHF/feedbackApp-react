@@ -1,6 +1,6 @@
 import React from "react";
-import { useState, useEffect } from "react";
-
+import { useEffect, useReducer, useContext } from "react";
+import GlobalContext from "../context/GlobalContext";
 function Header() {
   const style = {
     background: "linear-gradient(90deg, #ff9776, #ffd36e)",
@@ -8,26 +8,10 @@ function Header() {
     color: "transparent",
     backgroundClip: "text",
   };
-  const [theme, setTheme] = useState("dark");
-  const [themeIcon, setThemeIcon] = useState("🌙");
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-    setThemeIcon(theme === "light" ? "🌞" : "🌙");
-    localStorage.setItem("theme", theme);
-    document.body.className = theme;
-  };
-  useEffect(() => {
-    localStorage.setItem("theme", "dark");
-    if (localStorage.getItem("theme") === "dark") {
-      setTheme("dark");
-      setThemeIcon("🌙");
-      document.body.className = "dark";
-    } else {
-      setTheme("light");
-      setThemeIcon("🌞");
-      document.body.className = "light";
-    }
-  }, []);
+  const { theme, themeIcon, rating, feedbackList, toggleTheme } =
+    useContext(GlobalContext);
+
+  useEffect(() => {}, []);
   return (
     <header>
       <div className="header-inner">
