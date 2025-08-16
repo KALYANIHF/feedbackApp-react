@@ -11,7 +11,9 @@ function Header() {
   const { theme, themeIcon, rating, feedbackList, toggleTheme } =
     useContext(GlobalContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    document.body.className = theme;
+  }, []);
   return (
     <header>
       <div className="header-inner">
