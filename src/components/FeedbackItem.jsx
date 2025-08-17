@@ -1,5 +1,6 @@
 import React from "react";
 import incognitoIcon from "../assets/incognito.png";
+import profileIcon from "../assets/profile.png";
 
 function FeedbackItem({ item }) {
   const elementStyle = {
@@ -11,12 +12,13 @@ function FeedbackItem({ item }) {
       <div className="item-top">
         <div className="left">
           <div className="ava" style={elementStyle}>
-            {item.name !== "" ? (
-              item.name
+            {item.name ? (
+              <img src={profileIcon} alt="Profile" />
             ) : (
               <img src={incognitoIcon} alt="Incognito" />
             )}
           </div>
+          {item.name && <div className="userName">{item.name}</div>}
           <div>
             <span className="badge pill">⭐ {item.rating}</span>
             <span className="badge">
@@ -33,7 +35,9 @@ function FeedbackItem({ item }) {
         </div>
         <div>
           {item.tags.map((tag) => (
-            <span className="badge">{tag}</span>
+            <span key={tag} className="badge">
+              {tag}
+            </span>
           ))}
         </div>
       </div>

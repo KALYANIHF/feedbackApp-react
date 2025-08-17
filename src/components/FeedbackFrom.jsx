@@ -101,7 +101,8 @@ function FeedbackFrom() {
                 name="username"
                 id="username"
                 className="input"
-                placeholder="Enter Your name or Email..."
+                maxLength={20}
+                placeholder="Enter Your name..."
                 value={username}
                 onChange={handleFromData}
               />
