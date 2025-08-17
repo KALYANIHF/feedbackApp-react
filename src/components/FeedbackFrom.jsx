@@ -14,6 +14,7 @@ function FeedbackFrom() {
     tags,
     customtag,
     anon,
+    username,
     handleFromData,
     handleSubmit,
     handleReset,
@@ -29,7 +30,6 @@ function FeedbackFrom() {
             {/* <!-- radios injected --> */}
             {[...new Array(10)].map((_, i) => {
               const value = i + 1;
-              console.log(value);
               return (
                 <React.Fragment key={value}>
                   <input
@@ -93,6 +93,21 @@ function FeedbackFrom() {
             />
           </div>
         </div>
+        {!anon && (
+          <div className="grid">
+            <div>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                className="input"
+                placeholder="Enter Your name or Email..."
+                value={username}
+                onChange={handleFromData}
+              />
+            </div>
+          </div>
+        )}
         <div className="grid grid-2">
           <div>
             <div className="label">Anonymous</div>

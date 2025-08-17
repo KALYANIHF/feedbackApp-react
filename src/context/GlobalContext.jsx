@@ -9,13 +9,13 @@ export const GlobalContextProvider = ({ children }) => {
     themeIcon: "🌙",
     rating: 10,
     message: "",
+    username: "",
     tags: [],
     customtag: [],
     anon: false,
   };
   const [currentState, dispatch] = useReducer(globalReducer, initialState);
   const toggleTheme = () => {
-    console.log(currentState.theme);
     if (currentState.theme === "dark") {
       dispatch({
         type: "SET_THEME",
@@ -61,6 +61,17 @@ export const GlobalContextProvider = ({ children }) => {
         type: "SET_ANON",
         payload: !currentState.anon,
       });
+      if (currentState.anon) {
+        dispatch({
+          type: "SET_NAME",
+          payload: "",
+        });
+      }
+    } else if (e.target.name === "username") {
+      dispatch({
+        type: "SET_NAME",
+        payload: e.target.value,
+      });
     }
   };
 
@@ -81,27 +92,51 @@ export const GlobalContextProvider = ({ children }) => {
       toast.error("Message cannot be empty");
       return;
     }
-    /**
-     * validate the tags
-     */
-    if (currentState.tags === "") {
-      toast.error("tags cannot be empty");
-      return;
+
+    const newFeedback = {
+      id: currentState.feedbackList.length + 1,
+      rating: currentState.rating,
+      message: currentState.message,
+      tags: currentState.tags,
+      customtag: currentState.customtag,
+      anon: currentState.anon,
+    };
+    if (!currentState.anon) {
+      newFeedback.username = currentState.username;
     }
+
+    createFeedback(newFeedback);
+    handleReset();
   };
 
   const handleReset = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setFormData({
-      rating: 10,
-      message: "",
-      tags: [],
-      customtag: [],
-      anon: false,
+    // clear the form data
+    dispatch({
+      type: "SET_RATING",
+      payload: 10,
+    });
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "",
+    });
+    dispatch({
+      type: "SET_TAGS",
+      payload: [],
+    });
+    dispatch({
+      type: "SET_CUSTOMTAG",
+      payload: [],
+    });
+    dispatch({
+      type: "SET_ANON",
+      payload: false,
+    });
+    dispatch({
+      type: "SET_NAME",
+      payload: "",
     });
   };
-  const createFeedback = () => {
+  const createFeedback = (newFeedback) => {
     // Implement the logic to create feedback here
     /**
      * get the rating value form the form
@@ -115,6 +150,14 @@ export const GlobalContextProvider = ({ children }) => {
      * return the new feedback object
      *
      */
+    if (newFeedback !== "") {
+      dispatch({
+        type: "SET_FEEDBACK_LIST",
+        payload: [...currentState.feedbackList, newFeedback],
+      });
+    } else {
+      toast.error("Something went wrong not able to create feedback");
+    }
   };
 
   return (
@@ -128,6 +171,7 @@ export const GlobalContextProvider = ({ children }) => {
         tags: currentState.tags,
         customtag: currentState.customtag,
         anon: currentState.anon,
+        username: currentState.username,
         toggleTheme,
         handleFromData,
         handleSubmit,

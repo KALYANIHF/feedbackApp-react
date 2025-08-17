@@ -15,6 +15,8 @@ const globalReducer = (initialState, action) => {
       return { ...initialState, tags: action.payload };
     case "SET_CUSTOMTAG":
       return { ...initialState, customtag: action.payload };
+    case "SET_NAME":
+      return { ...initialState, username: action.payload };
     case "SET_ANON":
       return { ...initialState, anon: action.payload };
     case "SET_FEEDBACK_LIST":
