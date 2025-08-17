@@ -1,6 +1,8 @@
-import React from "react";
-import feedbacklist from "../_data/feedback";
+import { useContext } from "react";
+// import feedbacklist from "../_data/feedback";
 import FeedbackItem from "./FeedbackItem";
+import GlobalContext from "../context/GlobalContext";
+import { toast } from "react-toastify";
 
 function AllFeedback() {
   const elementStyle = {
@@ -9,6 +11,7 @@ function AllFeedback() {
     marginBottom: "10px",
     justifyContent: "flex-end",
   };
+  const { feedbackList } = useContext(GlobalContext);
   return (
     <section className="panel">
       <div className="section-title">All Feedback</div>
@@ -24,9 +27,20 @@ function AllFeedback() {
         </button>
       </div>
       <div id="list" className="list">
-        {feedbacklist.map((item) => {
-          return <FeedbackItem key={item.id} />;
-        })}
+        {feedbackList.length ? (
+          feedbackList.map((item) => {
+            return <FeedbackItem key={item.id} item={item} />;
+          })
+        ) : (
+          <div className="no-feedback">
+            <div>
+              <p>No Feedback Available...</p>
+              <p>
+                Be the first to share your thoughts and rate your experience!
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

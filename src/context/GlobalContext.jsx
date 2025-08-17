@@ -96,13 +96,20 @@ export const GlobalContextProvider = ({ children }) => {
     const newFeedback = {
       id: currentState.feedbackList.length + 1,
       rating: currentState.rating,
-      message: currentState.message,
-      tags: currentState.tags,
-      customtag: currentState.customtag,
       anon: currentState.anon,
+      msg: currentState.message,
+      tags: [currentState.tags],
+      ts: Date.now() - 86400000 * 2,
+      like: 5,
+      love: 3,
+      dislike: 0,
+      reply: "",
     };
     if (!currentState.anon) {
-      newFeedback.username = currentState.username;
+      newFeedback.name = currentState.username;
+    }
+    if (currentState.customtag !== "") {
+      newFeedback.tags.push(currentState.customtag);
     }
 
     createFeedback(newFeedback);
