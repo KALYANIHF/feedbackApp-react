@@ -29,7 +29,18 @@ export const GlobalContextProvider = ({ children }) => {
       });
     }
   };
-  const createFeedback = () => {};
+  const createFeedback = () => {
+    // create a new feedback item and add it to the feedback list
+    const newFeedback = {
+      id: Math.random(),
+      rating: currentState.rating,
+      message: "This is a new feedback message.",
+    };
+    dispatch({
+      type: "SET_FEEDBACK_LIST",
+      payload: [...currentState.feedbackList, newFeedback],
+    });
+  };
 
   return (
     <GlobalContext.Provider
