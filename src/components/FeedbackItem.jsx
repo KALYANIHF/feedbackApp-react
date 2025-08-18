@@ -8,7 +8,7 @@ function FeedbackItem({ item }) {
     fontSize: "10px",
   };
   return (
-    <div className="item">
+    <div className="item" id={`${item.id}`}>
       <div className="item-top">
         <div className="left">
           <div className="ava" style={elementStyle}>

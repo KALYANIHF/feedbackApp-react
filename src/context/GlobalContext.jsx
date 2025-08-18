@@ -11,7 +11,7 @@ export const GlobalContextProvider = ({ children }) => {
         name: "Aarav",
         anon: false,
         rating: 8,
-        tags: ["UI", "Performance"],
+        tags: ["ui", "performance"],
         msg: "The new design looks amazing, but the dashboard could load faster on mobile.",
         ts: Date.now() - 86400000 * 2,
         like: 5,
@@ -24,7 +24,7 @@ export const GlobalContextProvider = ({ children }) => {
         name: "Mira",
         anon: true,
         rating: 10,
-        tags: ["Performance", "Praise"],
+        tags: ["performance", "praise"],
         msg: "Super fast now! Animations are silky smooth. Keep it up 🙌",
         ts: Date.now() - 86400000 * 1.5,
         like: 8,
@@ -37,7 +37,7 @@ export const GlobalContextProvider = ({ children }) => {
         name: "Dev",
         anon: false,
         rating: 6,
-        tags: ["Features"],
+        tags: ["features"],
         msg: "Would love multi-project support and bulk tagging.",
         ts: Date.now() - 86400000 * 0.8,
         like: 2,
@@ -50,7 +50,7 @@ export const GlobalContextProvider = ({ children }) => {
         name: "Sara",
         anon: false,
         rating: 4,
-        tags: ["Bug", "UX"],
+        tags: ["bug", "ux"],
         msg: "Ran into a bug while saving. Also the settings labels are a bit confusing.",
         ts: Date.now() - 86400000 * 0.3,
         like: 1,
@@ -87,7 +87,97 @@ export const GlobalContextProvider = ({ children }) => {
       });
     }
   };
+  const handleCsv = (e) => {
+    e.preventDefault();
+    // Implement the logic to export feedback list to CSV here
+    /**
+     * get the feedback list from the state
+     * create a CSV file with the feedback list
+     * download the CSV file
+     *
+     */
+    const csvContent = currentState.feedbackList
+      .map((item) => {
+        return `${item.id},${item.name},${item.anon},${item.rating},${
+          item.msg
+        },${item.tags.join(",")},${item.ts},${item.like},${item.love},${
+          item.dislike
+        },${item.reply}`;
+      })
+      .join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "feedback.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+  const handlePrint = (e) => {
+    e.preventDefault();
+    window.print();
+  };
 
+  /* ===== Robust copy-to-clipboard helper ===== */
+  async function copyTextToClipboard(text) {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (e) {
+        console.warn("navigator.clipboard.writeText failed:", e);
+      }
+    }
+    // Fallback to execCommand
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (ok) return true;
+    } catch (e) {
+      console.warn("execCommand copy failed:", e);
+    }
+    // Final fallback: show prompt so user can copy manually
+    try {
+      window.prompt("Copy the link manually (Ctrl/Cmd+C):", text);
+    } catch (e) {
+      console.warn("prompt fallback failed", e);
+    }
+    return false;
+  }
+  const handleShare = async (e) => {
+    e.preventDefault();
+    // Implement the logic to share filters here
+    /**
+     * get the feedback list from the state
+     * create a shareable link with the feedback list
+     * share the link with the user
+     *
+     */
+    const s = new URLSearchParams({
+      q: q.value,
+      tag: fTag.value,
+      min: minR.value,
+      max: maxR.value,
+      sort: sort.value,
+    }).toString();
+    const url = location.origin + location.pathname + (s ? "?" + s : "");
+    const ok = await copyTextToClipboard(url);
+    if (ok) alert("Shareable link copied to clipboard!");
+    else
+      alert(
+        "Could not copy automatically. A dialog was opened with the link — please copy it manually."
+      );
+  };
   const handleFromData = (e) => {
     if (e.target.name === "rating") {
       dispatch({
@@ -151,7 +241,7 @@ export const GlobalContextProvider = ({ children }) => {
       rating: currentState.rating,
       anon: currentState.anon,
       msg: currentState.message,
-      tags: [currentState.tags],
+      tags: [currentState.tags.toLowerCase()],
       ts: Date.now() - 86400000 * 2,
       like: 5,
       love: 3,
@@ -162,7 +252,7 @@ export const GlobalContextProvider = ({ children }) => {
       newFeedback.name = currentState.username;
     }
     if (currentState.customtag !== "") {
-      newFeedback.tags.push(currentState.customtag);
+      newFeedback.tags.push(currentState.customtag.toLowerCase());
     }
 
     createFeedback(newFeedback);
@@ -232,11 +322,16 @@ export const GlobalContextProvider = ({ children }) => {
         customtag: currentState.customtag,
         anon: currentState.anon,
         username: currentState.username,
+        currentStateglobal: currentState,
+        dispatchglobal: dispatch,
         toggleTheme,
         handleFromData,
         handleSubmit,
         handleReset,
         createFeedback,
+        handleCsv,
+        handlePrint,
+        handleShare,
       }}
     >
       {children}

@@ -69,7 +69,7 @@ function FeedbackFrom() {
         </div>
         <div className="grid grid-2">
           <div>
-            <div className="label">Tags (multi)</div>
+            <div className="label">Tags</div>
             <select id="tags" name="tags" multiple onChange={handleFromData}>
               <option value="UI">UI</option>
               <option value="UX">UX</option>
