@@ -82,14 +82,6 @@ function FeedbackStat() {
     }
   };
 
-  console.log(
-    avgRating,
-    totalFeedback,
-    sentiment(),
-    getAllTags.flat(1),
-    getAllRatings
-  );
-
   return (
     <section className="panel">
       <h2 className="section-title">Analytics</h2>
