@@ -2,7 +2,6 @@ import { useContext } from "react";
 // import feedbacklist from "../_data/feedback";
 import FeedbackItem from "./FeedbackItem";
 import GlobalContext from "../context/GlobalContext";
-import { toast } from "react-toastify";
 
 function AllFeedback() {
   const elementStyle = {
