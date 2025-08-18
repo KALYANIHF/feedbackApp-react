@@ -11,43 +11,43 @@ function FeedbackStat() {
   const getAllRatings = [
     {
       key: "1",
-      value: 1,
+      value: 0,
     },
     {
       key: "2",
-      value: 1,
+      value: 0,
     },
     {
       key: "3",
-      value: 1,
+      value: 0,
     },
     {
       key: "4",
-      value: 1,
+      value: 0,
     },
     {
       key: "5",
-      value: 1,
+      value: 0,
     },
     {
       key: "6",
-      value: 1,
+      value: 0,
     },
     {
       key: "7",
-      value: 1,
+      value: 0,
     },
     {
       key: "8",
-      value: 1,
+      value: 0,
     },
     {
       key: "9",
-      value: 1,
+      value: 0,
     },
     {
       key: "10",
-      value: 1,
+      value: 0,
     },
   ];
 
@@ -107,8 +107,8 @@ function FeedbackStat() {
         <div className="stat">
           <div className="tagcloud" id="tagsTop">
             {getAllTags.flat(1).length > 0 ? (
-              getAllTags.flat(1).map((tag) => (
-                <div className="badge" key={tag}>
+              getAllTags.flat(1).map((tag, index) => (
+                <div className="badge" key={index}>
                   {tag}
                 </div>
               ))
@@ -123,10 +123,10 @@ function FeedbackStat() {
           <div className="chart" id="chart">
             {getAllRatings.map((rating, index) => (
               <div
-                key={index}
+                key={rating.key}
                 className="bar"
                 style={{
-                  height: `${(rating.value * 100) / 10}%`,
+                  height: `${(rating.value * 100) / 30}%`,
                 }}
               ></div>
             ))}
